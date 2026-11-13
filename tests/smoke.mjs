@@ -1,16 +1,22 @@
-import assert from 'node:assert/strict';
-const base = process.env.BASE_URL;
-const page = await fetch(base);
-assert.equal(page.status, 200);
-assert.ok((await page.text()).includes('<form'));
-async function request(path, body) {
-  const response = await fetch(base + path, body ? {
-    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
-  } : {});
-  assert.ok(response.ok, `${path}: HTTP ${response.status}`);
-  return response.json();
+import assert from "node:assert/strict";
+const base = process.env.BASE_URL || "http://127.0.0.1:3000";
+for (const path of ["/", "/demo", "/signup", "/discover"]) {
+  const response = await fetch(base + path);
+  assert.equal(response.status, 200);
+  assert.ok((await response.text()).includes("LocalLaunch"));
 }
-const email = `smoke-${crypto.randomUUID()}@example.com`;
-const booking = await request('/api/bookings', { name: 'Smoke Test', email, slot: '2027-12-01T10:00:00Z' });
-assert.ok((await request('/api/bookings')).some(row => row.id === booking.id && row.email === email));
-console.log('PASS: frontend serves HTML and proxies booking creation/listing');
+const listingResponse = await fetch(base + "/api/businesses");
+assert.equal(listingResponse.status, 200);
+const listing = await listingResponse.json();
+assert.ok(listing.some((b) => b.slug === "the-sunday-standard" && b.is_demo));
+const privateResponse = await fetch(base + "/api/owner/dashboard");
+assert.equal(privateResponse.status, 401);
+const legacy = await fetch(base + "/api/bookings");
+assert.equal(legacy.status, 404);
+const profile = await (
+  await fetch(base + "/api/businesses/the-sunday-standard")
+).json();
+assert.ok(profile.services.length > 0);
+assert.equal("bookings" in profile, false);
+assert.equal("owner_id" in profile.business, false);
+console.log("PASS: app routes, API proxy, sample business, and owner privacy");

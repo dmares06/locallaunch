@@ -1,23 +1,21 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LocalLaunch Demo</title>
-  <link rel="stylesheet" href="/styles.css">
-  <script src="/app.js" defer></script>
-</head>
-<body>
-  <main>
-    <h1>LocalLaunch Demo</h1>
-    <p class="demo">Local demo. Use sample data only.</p>
-    <form id="booking">
-      <label>Your name<input name="name" autocomplete="name" maxlength="200" required></label>
-      <label>Email<input name="email" type="email" autocomplete="email" maxlength="254" required></label>
-      <label>Booking time (your local time)<input name="slot" type="datetime-local" required></label>
-      <button type="submit">Book</button>
-    </form>
-    <p id="result" role="status" aria-live="polite"></p>
-  </main>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#254b3c" />
+    <meta
+      name="description"
+      content="A little more local. A lot more booked. Create a beautiful business page and make it easy for your neighborhood to book you."
+    />
+    <title>LocalLaunch — Good work deserves a full calendar</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+    <link rel="stylesheet" href="/styles.css?v=0.2.3" />
+    <script src="/app.js?v=0.2.3" defer></script>
+  </head>
+  <body>
+    <div id="app"><div class="loading">Opening your neighborhood…</div></div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <div id="modal-root"></div>
+  </body>
 </html>
